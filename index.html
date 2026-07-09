@@ -13,13 +13,15 @@
             background-size: cover; 
             background-position: center;
             position: relative;
-            cursor: crosshair; /* Indique visuellement que la zone est cliquable */
+            cursor: crosshair; 
         }
 
         #ui-top { position: absolute; top: 10px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px; color: white; font-weight: bold; text-shadow: 2px 2px #000; box-sizing: border-box; z-index: 10; }
         
-        #hp-container { position: absolute; top: 50px; left: 50%; transform: translateX(-50%); width: 200px; height: 20px; border: 2px solid white; background: #333; z-index: 10; }
+        #hp-container { position: absolute; top: 80px; left: 50%; transform: translateX(-50%); width: 200px; height: 20px; border: 2px solid white; background: #333; z-index: 10; }
         #hp-bar { width: 100%; height: 100%; background: red; transition: width 0.3s; }
+
+        #cp-section { background: rgba(0,0,0,0.6); padding: 5px 10px; border-radius: 5px; border: 1px solid #fff; }
 
         #player { 
             position: absolute !important; left: 5% !important; bottom: 5%; 
@@ -39,7 +41,7 @@
             background-repeat: no-repeat; 
             background-position: bottom center;
             z-index: 5; 
-            pointer-events: none; /* Ignore les clics sur l'image elle-même */
+            pointer-events: none;
         }
 
         #damage-text {
@@ -52,11 +54,11 @@
 </head>
 <body>
 
-    <!-- L'événement est maintenant sur game-scene -->
     <div id="game-scene" onclick="attack()">
         <div id="ui-top">
-            <div>Niveau: <span id="lvl">1</span> | Exp: <span id="xp">0</span>/20</div>
+            <div>Niveau: <span id="lvl">1</span> | Exp: <span id="xp">0</span>/<span id="xp-req">50</span></div>
             <div>Score: <span id="score">0</span></div>
+            <div id="cp-section">CP: <span id="cp">0</span> <button onclick="ameliorerAttaque(event)">Améliorer (+5 DMG)</button></div>
         </div>
 
         <div id="hp-container"><div id="hp-bar"></div></div>
@@ -68,35 +70,55 @@
     </div>
 
     <script>
-        let hp = 100, maxHp = 100, xp = 0, lvl = 1, score = 0;
+        let hp = 100, maxHp = 100, xp = 0, xpRequis = 50, lvl = 1, score = 0, cp = 0, degats = 10;
         
         function attack() {
-            hp -= 10;
+            hp -= degats;
             score += 100;
             
             let dmg = document.getElementById('damage-text');
+            dmg.innerText = "-" + degats;
             dmg.style.opacity = "1";
             setTimeout(() => { dmg.style.opacity = "0"; }, 300);
 
             if (hp <= 0) {
-                xp += 5;
-                if (xp >= 20) {
+                xp += 20;
+                if (xp >= xpRequis) {
                     lvl++;
                     xp = 0;
+                    cp += 1;
+                    xpRequis = Math.floor(xpRequis * 1.5);
+                    alert("Niveau supérieur ! Tu as gagné 1 CP. Total CP: " + cp);
                 }
-                hp = maxHp = Math.floor(maxHp * 1.2);
+                maxHp = Math.floor(maxHp * 1.3);
+                hp = maxHp;
             }
             updateUI();
+        }
+
+        function ameliorerAttaque(event) {
+            event.stopPropagation(); 
+            if (cp > 0) {
+                cp--;
+                degats += 5;
+                updateUI();
+                alert("Attaque améliorée ! Dégâts actuels : " + degats);
+            } else {
+                alert("Pas assez de CP !");
+            }
         }
 
         function updateUI() {
             document.getElementById('hp-bar').style.width = (hp / maxHp * 100) + "%";
             document.getElementById('lvl').innerText = lvl;
             document.getElementById('xp').innerText = xp;
+            document.getElementById('xp-req').innerText = xpRequis;
             document.getElementById('score').innerText = score;
+            document.getElementById('cp').innerText = cp;
         }
     </script>
 </body>
 </html>
+
 
 
