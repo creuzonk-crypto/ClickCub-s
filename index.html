@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; background: #1a1a1a; font-family: sans-serif; }
+        #ui { position: absolute; top: 20px; left: 20px; color: white; pointer-events: none; }
+    </style>
+</head>
+<body>
+    <div id="ui"><h1 id="score">Score: 0</h1></div>
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        const geometry = new THREE.BoxGeometry(1, 1, 1);
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+        const monster = new THREE.Mesh(geometry, material);
+        scene.add(monster);
+        camera.position.z = 3;
+
+        window.addEventListener('click', () => {
+            tg.HapticFeedback.impactOccurred('medium');
+            gsap.to(monster.scale, { duration: 0.1, x: 1.2, y: 1.2, z: 1.2, yoyo: true, repeat: 1 });
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            monster.rotation.x += 0.01;
+            monster.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>
