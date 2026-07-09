@@ -20,7 +20,7 @@
         #ui-right { position: absolute; top: 10px; right: 10px; text-align: right; z-index: 10; }
         .stat-box { background: rgba(0, 0, 0, 0.6); padding: 8px; border-radius: 5px; color: white; font-weight: bold; }
 
-        /* Barre de vie réduite de 17% */
+        /* Barre de vie réduite de 17% et positionnée bas */
         #hp-container { position: absolute; top: 38%; left: 50%; transform: translateX(-50%); width: 207px; height: 20px; border: 2px solid white; background: #333; z-index: 10; }
         #hp-bar { width: 100%; height: 100%; background: red; transition: width 0.3s; }
 
@@ -69,7 +69,10 @@
 
             if (hp <= 0) {
                 xp += 20;
-                if (xp >= xpRequis) { lvl++; xp = 0; cp += 1; xpRequis = Math.floor(xpRequis * 1.5); alert("Niveau supérieur !"); }
+                if (xp >= xpRequis) { 
+                    lvl++; xp = 0; cp += 1; xpRequis = Math.floor(xpRequis * 1.5); 
+                    showNotification("Niveau Supérieur !");
+                }
                 bossNum++;
                 document.getElementById('boss-indicator').innerText = "Boss " + bossNum;
                 maxHp = Math.floor(maxHp * 1.05); hp = maxHp;
@@ -77,9 +80,25 @@
             updateUI();
         }
 
+        function showNotification(text) {
+            let msg = document.createElement("div");
+            msg.innerText = text;
+            msg.style.position = "absolute";
+            msg.style.top = "20%";
+            msg.style.left = "50%";
+            msg.style.transform = "translateX(-50%)";
+            msg.style.color = "gold";
+            msg.style.fontSize = "24px";
+            msg.style.fontWeight = "bold";
+            msg.style.textShadow = "2px 2px #000";
+            msg.style.zIndex = "100";
+            document.body.appendChild(msg);
+            setTimeout(() => { msg.remove(); }, 1500);
+        }
+
         function ameliorerAttaque(event) {
             event.stopPropagation();
-            if (cp > 0) { cp--; degats += 5; updateUI(); } else { alert("Pas assez de CP !"); }
+            if (cp > 0) { cp--; degats += 5; updateUI(); } 
         }
 
         function updateUI() {
@@ -93,6 +112,7 @@
     </script>
 </body>
 </html>
+
 
 
 
