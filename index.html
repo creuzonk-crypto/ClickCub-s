@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Combat Urbain RPG</title>
+    <title>Geminigame</title>
     <style>
         body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: sans-serif; touch-action: manipulation; }
         #game-scene { width: 100vw; height: 100vh; background: url('1783596555675.jpg') center/cover; position: relative; }
@@ -19,8 +19,10 @@
         #player { position: absolute !important; left: 5% !important; bottom: 5%; width: 150px; height: 200px; background-image: url('player_marine.png'); background-size: contain; background-repeat: no-repeat; z-index: 10; pointer-events: none; }
         #monster { position: absolute !important; right: 5% !important; bottom: 5%; width: 250px; height: 350px; background-image: url('boss_mecha_kaiju.png'); background-size: contain; background-repeat: no-repeat; z-index: 5; pointer-events: none; }
         #damage-text { position: absolute; top: 40%; left: 70%; font-size: 35px; font-weight: bold; color: yellow; text-shadow: 2px 2px 4px black; pointer-events: none; opacity: 0; transition: opacity 0.2s; }
-        #shop-modal { display: none; position: absolute; top: 10%; left: 10%; width: 80%; background: rgba(0,0,0,0.95); color: white; padding: 20px; border: 2px solid white; z-index: 50; }
-        button { pointer-events: auto; cursor: pointer; }
+        
+        /* Fenêtre boutique centrée et scrollable */
+        #shop-modal { display: none; position: absolute; top: 5%; left: 5%; width: 90%; height: 90vh; background: rgba(0,0,0,0.95); color: white; padding: 20px; border: 2px solid white; z-index: 50; overflow-y: auto; box-sizing: border-box; }
+        button { pointer-events: auto; cursor: pointer; margin: 5px; padding: 10px; }
     </style>
 </head>
 <body>
@@ -47,7 +49,7 @@
 
     <div id="shop-modal">
         <h2 style="text-align:center;">Boutique</h2>
-        <button onclick="toggleShop()" style="width:100%; padding:15px; background:red; color:white;">Fermer</button>
+        <button onclick="toggleShop()" style="width:100%; padding:15px; background:red; color:white;">Fermer Boutique</button>
         <h3>Auto-Boost (Auto-Click 10/s + DMG x2)</h3>
         <button onclick="acheterAutoBoost(5, 30)">5 CP - 30 min</button>
         <button onclick="acheterAutoBoost(10, 120)">10 CP - 2h</button>
@@ -55,6 +57,8 @@
         <h3>Armures</h3>
         <button onclick="acheterArmure('Cuir', 5, 5)">Cuir (+5) - 5g</button>
         <button onclick="acheterArmure('Fer', 10, 10)">Fer (+10) - 10g</button>
+        <button onclick="acheterArmure('Diamant', 20, 30)">Diamant (+20) - 30g</button>
+        <button onclick="acheterArmure('Obsidienne', 50, 50)">Obsidienne (+50) - 50g</button>
     </div>
 
     <script>
@@ -80,7 +84,11 @@
                 xp += 20;
                 if (xp >= xpRequis) { lvl++; xp = 0; cp += 1; xpRequis = Math.floor(xpRequis * 1.3); showNotif("Niveau " + lvl + " !"); }
                 bossNum++;
-                if (bossNum % 5 === 0 && Math.random() < 0.35) { gold += 1; }
+                // Gain Gold équilibré : 1 garanti + 50% chance d'un 2ème tous les 5 boss
+                if (bossNum % 5 === 0) { 
+                    gold += 1; 
+                    if(Math.random() < 0.5) gold += 1;
+                }
                 document.getElementById('boss-indicator').innerText = "Boss " + bossNum;
                 maxHp = Math.floor(maxHp * 1.05); hp = maxHp;
             }
@@ -89,8 +97,7 @@
 
         function acheterAutoBoost(c, minutes) {
             if(cp >= c) {
-                cp -= c;
-                multDegats = 2; // Activation du boost de dégâts
+                cp -= c; multDegats = 2;
                 if(autoInterval) clearInterval(autoInterval);
                 autoInterval = setInterval(attack, 100);
                 showNotif("Auto-Boost Actif !");
@@ -121,6 +128,7 @@
     </script>
 </body>
 </html>
+
 
 
 
