@@ -20,7 +20,6 @@
         #ui-right { position: absolute; top: 10px; right: 10px; text-align: right; z-index: 10; }
         .stat-box { background: rgba(0, 0, 0, 0.6); padding: 8px; border-radius: 5px; color: white; font-weight: bold; }
 
-        /* Barre de vie réduite de 17% et positionnée bas */
         #hp-container { position: absolute; top: 38%; left: 50%; transform: translateX(-50%); width: 207px; height: 20px; border: 2px solid white; background: #333; z-index: 10; }
         #hp-bar { width: 100%; height: 100%; background: red; transition: width 0.3s; }
 
@@ -88,9 +87,11 @@
             msg.style.left = "50%";
             msg.style.transform = "translateX(-50%)";
             msg.style.color = "gold";
-            msg.style.fontSize = "24px";
+            // Police réduite pour éviter le saut de ligne
+            msg.style.fontSize = "18px"; 
             msg.style.fontWeight = "bold";
             msg.style.textShadow = "2px 2px #000";
+            msg.style.whiteSpace = "nowrap";
             msg.style.zIndex = "100";
             document.body.appendChild(msg);
             setTimeout(() => { msg.remove(); }, 1500);
@@ -112,6 +113,7 @@
     </script>
 </body>
 </html>
+
 
 
 
