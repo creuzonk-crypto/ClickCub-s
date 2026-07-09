@@ -20,31 +20,29 @@
         #hp-container { position: absolute; top: 50px; left: 50%; transform: translateX(-50%); width: 200px; height: 20px; border: 2px solid white; background: #333; z-index: 10; }
         #hp-bar { width: 100%; height: 100%; background: red; transition: width 0.3s; }
 
-        /* Position image joueur */
+        /* Le Joueur */
         #player { 
-            position: absolute !important; left: 5% !important; bottom: 5%; 
-            width: 220px; height: 300px; 
+            position: absolute; left: 4%; bottom: 5%; 
+            width: 200px; height: 280px; 
             background-image: url('player_marine.png'); 
             background-size: contain; 
             background-repeat: no-repeat; 
             background-position: bottom center;
-            z-index: 10; 
+            z-index: 5; 
         }
 
-        /* Position image Kaiju - Hitbox transparente forcée */
+        /* Le Kaiju - Hitbox transparente forcée, dimensions originales préservées */
         #monster { 
-            position: absolute !important; right: 5% !important; bottom: 5%; 
-            width: 300px; height: 420px; 
+            position: absolute; right: 17%; bottom: 5%; 
+            width: 350px; height: 480px; 
             background-image: url('boss_mecha_kaiju.png'); 
             background-size: contain; 
             background-repeat: no-repeat; 
             background-position: bottom center;
-            /* Suppression totale de la couleur de fond pour la hitbox */
+            /* Transparence forcée pour supprimer le carré bleu */
             background-color: transparent !important; 
-            border: none !important;
-            outline: none !important;
             cursor: pointer; 
-            z-index: 5; 
+            z-index: 6; 
         }
 
         #damage-text {
@@ -102,3 +100,4 @@
     </script>
 </body>
 </html>
+
