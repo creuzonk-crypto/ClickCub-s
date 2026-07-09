@@ -22,6 +22,14 @@
         #hp-bar { width: 100%; height: 100%; background: red; transition: width 0.3s; }
 
         #cp-section { background: rgba(0,0,0,0.6); padding: 5px 10px; border-radius: 5px; border: 1px solid #fff; }
+        
+        /* Style pour l'indicateur de boss */
+        #boss-indicator {
+            font-size: 24px;
+            color: red;
+            text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+            margin-top: 5px;
+        }
 
         #player { 
             position: absolute !important; left: 5% !important; bottom: 5%; 
@@ -58,7 +66,10 @@
         <div id="ui-top">
             <div>Niveau: <span id="lvl">1</span> | Exp: <span id="xp">0</span>/<span id="xp-req">50</span></div>
             <div>Score: <span id="score">0</span></div>
-            <div id="cp-section">CP: <span id="cp">0</span> <button onclick="ameliorerAttaque(event)">Améliorer (+5 DMG)</button></div>
+            <div id="cp-section">
+                CP: <span id="cp">0</span> <button onclick="ameliorerAttaque(event)">Améliorer (+5 DMG)</button>
+                <div id="boss-indicator">Boss 1</div>
+            </div>
         </div>
 
         <div id="hp-container"><div id="hp-bar"></div></div>
@@ -70,7 +81,7 @@
     </div>
 
     <script>
-        let hp = 100, maxHp = 100, xp = 0, xpRequis = 50, lvl = 1, score = 0, cp = 0, degats = 10;
+        let hp = 100, maxHp = 100, xp = 0, xpRequis = 50, lvl = 1, score = 0, cp = 0, degats = 10, bossNum = 1;
         
         function attack() {
             hp -= degats;
@@ -88,21 +99,24 @@
                     xp = 0;
                     cp += 1;
                     xpRequis = Math.floor(xpRequis * 1.5);
-                    alert("Niveau supérieur ! Tu as gagné 1 CP. Total CP: " + cp);
+                    alert("Niveau supérieur ! CP gagné : " + cp);
                 }
-                maxHp = Math.floor(maxHp * 1.3);
+                
+                // Progression du Boss : +0.7% de PV à chaque victoire
+                bossNum++;
+                document.getElementById('boss-indicator').innerText = "Boss " + bossNum;
+                maxHp = Math.floor(maxHp * 1.007);
                 hp = maxHp;
             }
             updateUI();
         }
 
         function ameliorerAttaque(event) {
-            event.stopPropagation(); 
+            event.stopPropagation();
             if (cp > 0) {
                 cp--;
                 degats += 5;
                 updateUI();
-                alert("Attaque améliorée ! Dégâts actuels : " + degats);
             } else {
                 alert("Pas assez de CP !");
             }
@@ -119,6 +133,7 @@
     </script>
 </body>
 </html>
+
 
 
 
