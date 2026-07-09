@@ -20,10 +20,10 @@
         #hp-container { position: absolute; top: 50px; left: 50%; transform: translateX(-50%); width: 200px; height: 20px; border: 2px solid white; background: #333; z-index: 10; }
         #hp-bar { width: 100%; height: 100%; background: red; transition: width 0.3s; }
 
-        /* Le Joueur - Décalé à gauche */
+        /* Joueur agrandi et décalé à gauche */
         #player { 
             position: absolute; left: 5%; bottom: 5%; 
-            width: 180px; height: 250px; 
+            width: 270px; height: 375px; 
             background-image: url('player_marine.png'); 
             background-size: contain; 
             background-repeat: no-repeat; 
@@ -31,15 +31,15 @@
             z-index: 5; 
         }
 
-        /* Le Monstre - Décalé à droite, taille ajustée, pas de carré bleu */
+        /* Kaiju agrandi, décalé à droite, fond transparent forcé */
         #monster { 
             position: absolute; right: 5%; bottom: 5%; 
-            width: 300px; height: 420px; 
+            width: 450px; height: 630px; 
             background-image: url('boss_mecha_kaiju.png'); 
             background-size: contain; 
             background-repeat: no-repeat; 
             background-position: bottom center;
-            background-color: transparent !important; /* Force la suppression du fond */
+            background-color: transparent !important; 
             cursor: pointer; 
             z-index: 6; 
         }
@@ -99,6 +99,7 @@
     </script>
 </body>
 </html>
+
 
 
 
