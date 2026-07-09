@@ -16,12 +16,9 @@
         #hp-bar { width: 100%; height: 100%; background: red; transition: width 0.3s; }
         
         #boss-indicator { font-size: 20px; color: red; text-shadow: 2px 2px 0 #000; margin-top: 5px; }
-
         #player { position: absolute !important; left: 5% !important; bottom: 5%; width: 150px; height: 200px; background-image: url('player_marine.png'); background-size: contain; background-repeat: no-repeat; z-index: 10; pointer-events: none; }
         #monster { position: absolute !important; right: 5% !important; bottom: 5%; width: 250px; height: 350px; background-image: url('boss_mecha_kaiju.png'); background-size: contain; background-repeat: no-repeat; z-index: 5; pointer-events: none; }
-
         #damage-text { position: absolute; top: 40%; left: 70%; font-size: 35px; font-weight: bold; color: yellow; text-shadow: 2px 2px 4px black; pointer-events: none; opacity: 0; transition: opacity 0.2s; }
-        
         #shop-modal { display: none; position: absolute; top: 10%; left: 10%; width: 80%; background: rgba(0,0,0,0.95); color: white; padding: 20px; border: 2px solid white; z-index: 50; }
         button { pointer-events: auto; cursor: pointer; }
     </style>
@@ -51,20 +48,19 @@
     <div id="shop-modal">
         <h2 style="text-align:center;">Boutique</h2>
         <button onclick="toggleShop()" style="width:100%; padding:15px; background:red; color:white;">Fermer</button>
-        <h3>Boosts (10 clics/s)</h3>
-        <button onclick="acheterBoost(5, 30)">5 CP - 30 min Auto</button>
-        <button onclick="acheterBoost(10, 120)">10 CP - 2h Auto</button>
-        <button onclick="acheterBoost(100, 99999)">100 CP - Infini</button>
+        <h3>Auto-Boost (Auto-Click 10/s + DMG x2)</h3>
+        <button onclick="acheterAutoBoost(5, 30)">5 CP - 30 min</button>
+        <button onclick="acheterAutoBoost(10, 120)">10 CP - 2h</button>
+        <button onclick="acheterAutoBoost(100, 99999)">100 CP - Infini</button>
         <h3>Armures</h3>
         <button onclick="acheterArmure('Cuir', 5, 5)">Cuir (+5) - 5g</button>
         <button onclick="acheterArmure('Fer', 10, 10)">Fer (+10) - 10g</button>
     </div>
 
     <script>
-        let hp = 100, maxHp = 100, xp = 0, xpRequis = 50, lvl = 1, score = 0, cp = 0, degats = 10, bossNum = 1, gold = 0, bonusArmure = 0;
+        let hp = 100, maxHp = 100, xp = 0, xpRequis = 50, lvl = 1, score = 0, cp = 0, degats = 10, bossNum = 1, gold = 0, bonusArmure = 0, multDegats = 1;
         let autoInterval = null;
 
-        // Gestion Multi-Touch corrigée pour ne pas bloquer les boutons
         document.getElementById('game-scene').addEventListener('touchstart', (e) => {
             if (e.target.tagName === 'BUTTON') return;
             e.preventDefault();
@@ -72,10 +68,9 @@
         }, {passive: false});
 
         function attack() {
-            let totalDmg = degats + bonusArmure;
+            let totalDmg = (degats + bonusArmure) * multDegats;
             hp -= totalDmg;
             score += 100;
-            
             let dmgTxt = document.getElementById('damage-text');
             dmgTxt.innerText = "-" + totalDmg;
             dmgTxt.style.opacity = "1";
@@ -92,13 +87,14 @@
             updateUI();
         }
 
-        function acheterBoost(c, minutes) {
+        function acheterAutoBoost(c, minutes) {
             if(cp >= c) {
                 cp -= c;
+                multDegats = 2; // Activation du boost de dégâts
                 if(autoInterval) clearInterval(autoInterval);
                 autoInterval = setInterval(attack, 100);
-                showNotif("Auto-Click activé !");
-                if(minutes < 99999) setTimeout(() => { clearInterval(autoInterval); autoInterval = null; }, minutes * 60000);
+                showNotif("Auto-Boost Actif !");
+                if(minutes < 99999) setTimeout(() => { clearInterval(autoInterval); autoInterval = null; multDegats = 1; showNotif("Boost terminé !"); }, minutes * 60000);
             } else { showNotif("CP insuffisant"); }
             updateUI();
         }
@@ -125,6 +121,7 @@
     </script>
 </body>
 </html>
+
 
 
 
