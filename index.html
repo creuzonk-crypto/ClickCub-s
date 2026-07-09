@@ -35,16 +35,20 @@
         background-position: bottom; 
         z-index: 5; 
     }
+         #monster { 
+    position: absolute; 
+    right: 5%; bottom: 10%; 
+    width: 200px; /* Largeur de l'image du boss */
+    height: 230px; /* Hauteur de l'image du boss */
+    background-image: url('boss_mecha_kaiju.png'); /* Ton nouveau fichier */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    cursor: pointer; 
+    z-index: 5; 
+    background-color: transparent; /* Fond transparent */
+}
 
-    #monster { 
-        position: absolute; 
-        right: 15%; bottom: 15%; 
-        width: 100px; 
-        height: 100px; 
-        background: green; 
-        cursor: pointer; 
-        z-index: 5; 
-    }
 
     </style>
 </head>
